@@ -4,7 +4,7 @@ from scipy.sparse import lil_matrix
 from sklearn.linear_model import Ridge
 import sys
 
-def calculate_rapm(lineup_stints_file, players_file, minutes_file, output_file, regularization_alpha=500, min_minutes=500):
+def calculate_rapm(lineup_stints_file, players_file, minutes_file, output_file, regularization_alpha=500, min_minutes=1000):
     """
     Calculates player RAPM (Regularized Adjusted Plus-Minus) using Ridge Regression,
     filtered for players who meet a minimum minutes played criteria.
@@ -92,8 +92,8 @@ def calculate_rapm(lineup_stints_file, players_file, minutes_file, output_file, 
         final_results_df.to_csv(output_file, index=False)
 
         print(f"Successfully calculated RAPM and saved to {output_file}.")
-        print("\nTop 20 Players by RAPM (>= 500 minutes):")
-        print(final_results_df.head(20).to_string())
+        print(f"\nTop 20 Players by RAPM (>= {min_minutes} minutes):")
+        print(final_results_df.head(20).to_string(index=False))
 
     except FileNotFoundError as e:
         print(f"Error: The file {e.filename} was not found.", file=sys.stderr)
@@ -105,5 +105,6 @@ if __name__ == '__main__':
         lineup_stints_file='lineup_stints.csv',
         players_file='players.csv',
         minutes_file='player_minutes.csv',
-        output_file='rapm_results_min500.csv'
+        output_file='rapm_results_min1000.csv',
+        min_minutes=1000
     ) 
